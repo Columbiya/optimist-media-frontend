@@ -9,7 +9,6 @@ import { ChevronDownIcon } from '@chakra-ui/icons'
 import { ViewIcon } from '@chakra-ui/icons'
 import { FiLogOut } from 'react-icons/fi'
 import { useSubjectsStore } from '@/store/useSubjectsStore'
-import Link from 'next/link'
 
 export const Header: React.FC = () => {
     const router = useRouter()
@@ -42,9 +41,16 @@ export const Header: React.FC = () => {
                     <Heading onClick={() => router.push('/')} cursor="pointer" size="md" color="blue.400">Optimist Media</Heading>
                     
                     <Flex as="nav" alignItems='center'>
+                        {user?.isAdmin && 
+                            <NextLink href={ROUTES.ADMIN_PANEL} style={{marginRight: 15}}>
+                                Админ панель
+                            </NextLink>
+                        }
+
                         <NextLink href={ROUTES.ARTICLES} style={{marginRight: 15}}>
                             Все статьи
                         </NextLink>
+
                         {!isAuthenticated ?
                         <>
                             <NextLink href={ROUTES.REGISTER} style={{marginRight: 15}}>
@@ -57,9 +63,9 @@ export const Header: React.FC = () => {
                         <Flex>
                             <HStack mr={25}>
                                 {subjects.map(s => (
-                                    <Link key={s.id} href={`${ROUTES.ARTICLES}?subjectId=${s.id}`}>
+                                    <NextLink key={s.id} href={`${ROUTES.ARTICLES}?subjectId=${s.id}`}>
                                         {s.subject}
-                                    </Link>
+                                    </NextLink>
                                 ))}
                             </HStack>
                             <Menu>
@@ -67,7 +73,7 @@ export const Header: React.FC = () => {
                                     {user && user.email.length > 20 ? user.email.slice(0, 20) + '...': user?.email}
                                 </MenuButton>
                                 <MenuList>
-                                    <MenuItem icon={<ViewIcon />}>
+                                    <MenuItem icon={<ViewIcon />} as={NextLink} href={ROUTES.PROFILE}>
                                         Профиль
                                     </MenuItem>
 

@@ -1,0 +1,70 @@
+import { DownloadIcon } from '@chakra-ui/icons'
+import { Box, Skeleton, useBoolean } from '@chakra-ui/react'
+import Image from 'next/image'
+import { useMemo } from 'react'
+import defaultProfilePhoto from '../../images/profile/default-profile-photo.png'
+
+interface ProfileImageProps {
+    imagePreview?: string
+    profilePhoto?: string
+    imageFixedWidth: boolean
+    fileInputRef: any
+}
+
+export const ProfileImage: React.FC<ProfileImageProps> = ({ imagePreview, profilePhoto, imageFixedWidth, fileInputRef }) => {
+    const [isMouseOverProfilePhoto, setMouseOverProfilePhoto] = useBoolean(false)
+    const [imageLoaded, setImageLoaded] = useBoolean(false)
+    const userProfilePhoto = useMemo(() => {
+        if (imagePreview) {
+            return imagePreview
+        }
+        else if (profilePhoto) {
+            return `http://localhost:5000/${profilePhoto}`
+        }
+        else {
+            return defaultProfilePhoto
+        }
+    }, [profilePhoto, imagePreview, defaultProfilePhoto]) 
+
+    return (
+        <Box
+            width={250}
+            height={250}
+            as="a"
+            onClick={() => fileInputRef.current.click()}
+            onMouseEnter={setMouseOverProfilePhoto.on}
+            onMouseLeave={setMouseOverProfilePhoto.off}
+            border={profilePhoto || imagePreview ? 'none': "1px solid #fff"} 
+            rounded="2xl" 
+            display="inline-block"
+            boxShadow="1px 3px 15px #ccc" 
+            transition="box-shadow .5s ease, background .5s ease" 
+            cursor="pointer"
+            _hover={{boxShadow: 'none', background: "#ccc"}}
+            pos="relative"
+            overflow='hidden'
+            background="#000 !important"
+            mt={15}>
+
+            <Skeleton h="100%" isLoaded={imageLoaded} />
+
+
+            <Image src={userProfilePhoto}
+                    alt={`Изображение профиля`} 
+                    style={{objectFit: 'cover', opacity: isMouseOverProfilePhoto ? 0.7: 1, transition: 'opacity .5s ease'}}
+                    onLoad={setImageLoaded.on}
+                    fill={!imageFixedWidth} 
+                    width={!imageFixedWidth ? undefined: 128} 
+                    height={!imageFixedWidth ? undefined: 128} />
+
+            
+            <DownloadIcon 
+                pos="absolute" 
+                top="50%" 
+                left="50%" 
+                transform="translate(-50%, -50%)"
+                opacity={isMouseOverProfilePhoto ? 1: 0}
+                transition="opacity .5s ease" />
+        </Box>
+    )
+}

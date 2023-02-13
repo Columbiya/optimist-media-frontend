@@ -19,6 +19,7 @@ interface RegisterResponse extends CheckResponse {
 interface User {
     email: string
     id: number
+    isAdmin: boolean
 }
 
 export interface CheckResponse extends StatusResponse {
@@ -39,12 +40,14 @@ interface AuthState {
     registerUser: (payload: RegisterUserPayload) => Promise<void>
     check: () => Promise<void>
     login: (payload: RegisterUserPayload) => Promise<void>
+    loaded: boolean
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
     isAuthenticated: false,
     user: null,
-    getAuthenticated: () => set((state) => ({ isAuthenticated: true })),
+    loaded: false,
+    getAuthenticated: () => set((state) => ({ isAuthenticated: true, loaded: true })),
     unauthorize: () => {
         set((state) => ({ isAuthenticated: false }))
         localStorage.removeItem('accessToken')
@@ -56,7 +59,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         localStorage.setItem('accessToken', data.token)
         localStorage.setItem('refreshToken', data.refreshToken)
 
-        set(state => ({ isAuthenticated: true, user: data.user }))
+        set(state => ({ isAuthenticated: true, user: data.user, loaded: true }))
     },
     login: async (payload) => {
         const data = await axios.post<loginResponse>('http://localhost:5000/api/auth/login', {...payload}).then(res => res.data)
@@ -64,7 +67,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         localStorage.setItem('accessToken', data.token)
         localStorage.setItem('refreshToken', data.refreshToken)
         console.log(data.user)
-        set(state => ({user: data.user, isAuthenticated: true}))
+        set(state => ({user: data.user, isAuthenticated: true, loaded: true}))
     },
     check: async () => {
         if (!localStorage.getItem('accessToken') || !localStorage.getItem('refreshToken')) return
@@ -76,7 +79,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         }).then(res => res.data)
 
         if (data.status) {
-            set(state => ({ isAuthenticated: true, user: data.user }))
+            set(state => ({ isAuthenticated: true, user: data.user, loaded: true }))
         }
     }
 }))
