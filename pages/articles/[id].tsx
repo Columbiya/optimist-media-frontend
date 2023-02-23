@@ -52,7 +52,7 @@ const ArticleDetails: NextPageWithLayout<ArticleDetailsProps> = ({ id, subjectId
     const [likes, setLikes] = useState(articleLikes)
     const { user } = useAuthStore()
 
-    console.log(likes)
+    console.log(articleImage)
 
     const onArticleLike = useCallback(async () => {
         if (!user) return
