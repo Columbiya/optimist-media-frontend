@@ -142,7 +142,7 @@ const AdminPanelPage: NextPageWithLayout = () => {
         return () => {
             toggleColorMode()
         }
-    }, [colorMode])
+    }, [colorMode, toggleColorMode])
 
     return (
        <>
@@ -198,6 +198,7 @@ const AdminPanelPage: NextPageWithLayout = () => {
                             src={imagePreview}
                             maxW={250}
                             mb={15}
+                            alt="Preview"
                         />
                     </>
                 }

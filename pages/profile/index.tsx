@@ -58,13 +58,13 @@ const ProfilePage: NextPageWithLayout = (props) => {
                 isClosable: true
             })
         }
-    }, [activePhotos])
+    }, [activePhotos, id, onClose, setUserProfilePhoto, toast])
 
     const onCancelUploading = useCallback(() => {
         setImagePreview(undefined)
         setActivePhoto(null)
         onClose()
-    }, [])
+    }, [onClose])
 
     useEffect(() => {
         if (!loaded) return
@@ -104,7 +104,7 @@ const ProfilePage: NextPageWithLayout = (props) => {
 
         getUserData()
 
-    }, [user, isAuthenticated, loaded])
+    }, [user, isAuthenticated, loaded, fetchUserDetails, router, toast])
 
     useEffect(() => {
         if (!activePhotos || activePhotos.length === 0) {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { AppContainer } from "@/components/AppContainer/AppContainer";
 import { MainLayout } from "@/layouts/MainLayout";
 import { Article } from "@/models/Article";
@@ -9,6 +9,7 @@ import { GetServerSidePropsContext } from "next";
 import { NextPageWithLayout } from "../_app";
 import { CheckResponse, useAuthStore } from '@/store/authStore';
 import { ViewIcon } from '@chakra-ui/icons'
+import { EditorOutput, possibleBlocks } from '@/utils/editor-output';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const promises = await Promise.allSettled([
@@ -26,7 +27,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
             props: {
                 id: data.id,
                 title: data.title,
-                text: data.text,
+                text: JSON.parse(data.text),
                 subjectId: data.subjectId,
                 userId: data.userId,
                 articleImage: data.articleImage,
@@ -45,12 +46,18 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
 }
 
-type ArticleDetailsProps = Article & {likes: number}
+const parseElement = (element: possibleBlocks) => {
+}
+
+type ArticleDetailsProps = Omit<Article, 'text'> & {likes: number} & {text: EditorOutput}
 
 const ArticleDetails: NextPageWithLayout<ArticleDetailsProps> = ({ id, subjectId, text, title, userId, articleImage, views, likes: articleLikes }) => {
     const [liked, setLiked] = useBoolean(false)
     const [likes, setLikes] = useState(articleLikes)
     const { user } = useAuthStore()
+    const parsedContents = useMemo(() => {
+        // text.blocks.map()
+    }, [])
 
     console.log(articleImage)
 
@@ -62,18 +69,18 @@ const ArticleDetails: NextPageWithLayout<ArticleDetailsProps> = ({ id, subjectId
                 await axios.post<CheckResponse>('http://localhost:5000/api/articles/like', {userId: user?.id, articleId: id}).then(res => res.data)
 
                 setLiked.on()
-                setLikes(l => ++l)
+                setLikes(l => l + 1)
             }
             else {
                 await axios.post<CheckResponse>('http://localhost:5000/api/articles/unlike', {userId: user?.id, articleId: id}).then(res => res.data)
 
                 setLiked.off()
-                setLikes(l => --l)
+                setLikes(l => l - 1)
             }
         } catch(e) {
             console.log(e)
         }
-    }, [liked, user])
+    }, [liked, user, id, setLiked])
 
     useEffect(() => {
         async function getLiked() {
@@ -90,7 +97,7 @@ const ArticleDetails: NextPageWithLayout<ArticleDetailsProps> = ({ id, subjectId
         }
 
         getLiked()
-    }, [user])
+    }, [user, id, setLiked])
 
     return (
          <>
@@ -100,7 +107,7 @@ const ArticleDetails: NextPageWithLayout<ArticleDetailsProps> = ({ id, subjectId
                 </Box>
 
                 <Center mt={50} pb={50}>
-                    <Text>{text}</Text>
+                    {/* {text.blocks.map(e => )} */}
                 </Center>
 
             </AppContainer>

@@ -48,13 +48,13 @@ const RegisterPage: NextPageWithLayout = () => {
         }
 
         console.log(vals)
-    }, [])
+    }, [registerUser, setError, toast])
 
     useEffect(() => {
         if (isAuthenticated) {
             router.push(ROUTES.ARTICLES)
         }
-    }, [isAuthenticated])
+    }, [isAuthenticated, router])
 
     return (
         <>

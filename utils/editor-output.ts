@@ -11,7 +11,7 @@ export enum BlocksTypes {
     DELIMITER = 'delimiter'
 }
 
-type possibleBlocks = 
+export type possibleBlocks = 
     BlockImage | BlockParagraph | BlockLink | 
     BlockTable | BlockList | BlockWarning |
     BlockQuote | BlockChecklist | BlockDelimiter

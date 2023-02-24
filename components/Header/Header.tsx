@@ -32,7 +32,7 @@ export const Header: React.FC = () => {
         }
 
         getData()
-    }, [])
+    }, [toast, getSubjects])
 
     return (
         <Box pos='static' top={0} left={0} p={15} background="whiteAlpha.50">

@@ -17,7 +17,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
 
   useEffect(() => {
     check()
-  }, [])
+  }, [check])
 
   return (
     <ChakraProvider theme={theme}>

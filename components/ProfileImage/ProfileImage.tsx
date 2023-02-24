@@ -24,7 +24,7 @@ export const ProfileImage: React.FC<ProfileImageProps> = ({ imagePreview, profil
         else {
             return defaultProfilePhoto
         }
-    }, [profilePhoto, imagePreview, defaultProfilePhoto]) 
+    }, [profilePhoto, imagePreview]) 
 
     return (
         <Box

@@ -37,13 +37,13 @@ const LoginPage: NextPageWithLayout = () => {
                 isClosable: true
             })
         }
-    }, [])
+    }, [login, toast])
 
     useEffect(() => {
         if (isAuthenticated) {
             router.push(ROUTES.ARTICLES)
         }
-    }, [isAuthenticated])
+    }, [isAuthenticated, router])
 
     return (
         <>
