@@ -1,9 +1,9 @@
 import { AppContainer } from "@/components/AppContainer/AppContainer";
 import { Header } from "@/components/Header/Header"
 import { ChevronRightIcon } from "@chakra-ui/icons";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, Container, Divider } from "@chakra-ui/react"
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, Container, Divider, useColorMode } from "@chakra-ui/react"
 import { useRouter } from "next/router";
-import { useMemo } from 'react'
+import { useMemo, useEffect } from 'react'
 
 interface MainLayoutProps {
     children: React.ReactNode
@@ -14,6 +14,13 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     const crumbsPath = useMemo(() => {
         return router.pathname.split('/')
     }, [router.pathname])
+    const { colorMode, toggleColorMode } = useColorMode()
+
+    useEffect(() => {
+        if (colorMode === 'light') {
+            toggleColorMode()
+        }
+    }, [])
 
     return (
         <>

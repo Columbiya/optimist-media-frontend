@@ -97,7 +97,12 @@ const EditorJS: React.FC<EditorJSProps> = ({ data, setData, setEditorInstance })
         list: List,
         warning: Warning,
         code: Code,
-        link: LinkTool,
+        link: {
+            class: LinkTool,
+            config: {
+                endpoint: 'http://localhost:5000/api/check-link/check'
+            }
+        },
         image: {
             class: Image,
             config: {

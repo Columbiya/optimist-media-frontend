@@ -139,7 +139,7 @@ const ProfilePage: NextPageWithLayout = (props) => {
                         <VStack m="0" alignItems='flex-start'>
                             <ProfileImage 
                                 fileInputRef={ref} 
-                                imageFixedWidth={!profilePhoto && !imagePreview && activePhotos?.length == 0} 
+                                imageFixedWidth={!profilePhoto && !imagePreview && activePhotos?.length != 0} 
                                 imagePreview={imagePreview} 
                                 profilePhoto={profilePhoto} />
                             

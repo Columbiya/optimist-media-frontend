@@ -36,18 +36,19 @@ export const ProfileImage: React.FC<ProfileImageProps> = ({ imagePreview, profil
             onMouseLeave={setMouseOverProfilePhoto.off}
             border={profilePhoto || imagePreview ? 'none': "1px solid #fff"} 
             rounded="2xl" 
-            display="inline-block"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
             boxShadow="1px 3px 15px #ccc" 
             transition="box-shadow .5s ease, background .5s ease" 
             cursor="pointer"
             _hover={{boxShadow: 'none', background: "#ccc"}}
             pos="relative"
             overflow='hidden'
-            background="#000 !important"
+            background={!imageFixedWidth ? "#000": 'transparent'}
             mt={15}>
 
             <Skeleton h="100%" isLoaded={imageLoaded} />
-
 
             <Image src={userProfilePhoto}
                     alt={`Изображение профиля`} 
@@ -57,7 +58,6 @@ export const ProfileImage: React.FC<ProfileImageProps> = ({ imagePreview, profil
                     width={!imageFixedWidth ? undefined: 128} 
                     height={!imageFixedWidth ? undefined: 128} />
 
-            
             <DownloadIcon 
                 pos="absolute" 
                 top="50%" 

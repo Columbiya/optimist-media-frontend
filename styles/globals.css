@@ -9,3 +9,8 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+.link-tool__image {
+  width: 16px !important;
+  height: 16px !important;
+}
