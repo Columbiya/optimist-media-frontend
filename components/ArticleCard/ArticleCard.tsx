@@ -12,7 +12,13 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ id, subjectId, text, t
     const router = useRouter()
 
     return (
-        <GridItem onMouseEnter={setHovering.on} onMouseLeave={setHovering.off} cursor="pointer" onClick={() => router.push(ROUTES.ARTICLES + `/${id}`)}>
+        <GridItem 
+            onMouseEnter={setHovering.on} 
+            onMouseLeave={setHovering.off} 
+            cursor="pointer" 
+            onClick={() => router.push(ROUTES.ARTICLES + `/${id}`)} 
+            data-testid="article-card"
+        >
             <Card h="100%">
                 <CardHeader style={{position: 'relative', overflow: 'hidden'}} w="100%" height="300px">
                     <Image 
@@ -22,7 +28,11 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ id, subjectId, text, t
                         fill
                         style={{objectFit: 'cover', transition: 'transform .5s ease', transform: isHovering ? "scale(1.3)": 'none'}}
                     />
-                    <Skeleton isLoaded={!loading} h="100%" w="100%" pos="absolute" left="0" top="0"/>
+                    <Skeleton 
+                        data-testid="skeleton" 
+                        isLoaded={!loading} 
+                        h="100%" w="100%" 
+                        pos="absolute" left="0" top="0"/>
                 </CardHeader>
                 <CardBody>
                     <Heading size='md'>{title}</Heading>

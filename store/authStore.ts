@@ -47,6 +47,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     isAuthenticated: false,
     user: null,
     loaded: false,
+    email: "123",
     getAuthenticated: () => set((state) => ({ isAuthenticated: true, loaded: true })),
     unauthorize: () => {
         set((state) => ({ isAuthenticated: false }))

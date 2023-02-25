@@ -78,6 +78,8 @@ const ProfilePage: NextPageWithLayout = (props) => {
                 isClosable: true
             })
 
+            router.push(ROUTES.LOGIN)
+
             return
         }
         else if (!isAuthenticated && user) {

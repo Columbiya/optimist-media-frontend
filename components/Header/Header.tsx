@@ -69,7 +69,11 @@ export const Header: React.FC = () => {
                                 ))}
                             </HStack>
                             <Menu>
-                                <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+                                <MenuButton 
+                                    as={Button}
+                                    rightIcon={<ChevronDownIcon />}
+                                    data-testid="user-email"
+                                >
                                     {user && user.email.length > 20 ? user.email.slice(0, 20) + '...': user?.email}
                                 </MenuButton>
                                 <MenuList>

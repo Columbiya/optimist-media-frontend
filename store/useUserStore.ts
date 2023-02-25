@@ -9,7 +9,7 @@ interface UserState {
     articles?: Article[]
     profilePhoto?: string
     fetchUserDetails: (id: number) => Promise<void>
-    setUserProfilePhoto: (image: File, userId: number) => Promise<void>
+    setUserProfilePhoto: (image: File | null, userId: number) => Promise<void>
     loaded: boolean
 }
 
@@ -34,10 +34,10 @@ export const useUserStore = create<UserState>((set) => ({
             throw new Error()
         }
     },
-    async setUserProfilePhoto(image, userId) {
+    async setUserProfilePhoto(image = null, userId) {
         try {
             const formData = new FormData()
-            formData.append('image', image)
+            formData.append('image', image ? image: "")
 
             const userWithNewImage = await axios.post<UserResponse>(`http://localhost:5000/api/users/set-image/${userId}`, formData).then(res => res.data)
 

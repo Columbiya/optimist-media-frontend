@@ -2,7 +2,7 @@ import { MainLayout } from "@/layouts/MainLayout";
 import { useAuthStore } from "@/store/authStore";
 import { ROUTES } from "@/utils/ROUTES";
 import { emailValid } from "@/utils/validators";
-import { Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Heading, Input, useToast } from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, FormErrorMessage, useToast, FormLabel, Heading, Input } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -49,20 +49,27 @@ const LoginPage: NextPageWithLayout = () => {
         <>
         <Box maxW={500} pos="fixed" top="50%" left="50%" transform="translate(-50%, -50%)">
             <Heading mb={15}>Авторизуйся, чтобы начать создавать</Heading>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit)} data-testid="form">
                 <FormControl isRequired isInvalid={!!errors.email} mb={15}>
                     <FormLabel>Email</FormLabel>
-                    <Input {...register('email', {validate: {"Введите валидный email": emailValid}})} placeholder="Ваш email"/>
+                    <Input 
+                        {...register('email', {validate: {"Введите валидный email": emailValid}})} 
+                        placeholder="Ваш email"
+                        data-testid="email"
+                    />
                     <FormErrorMessage>{errors.email?.type}</FormErrorMessage>
                 </FormControl>
 
                 <FormControl isRequired isInvalid={!!errors.password} mb={15}>
                     <FormLabel>Пароль</FormLabel>
-                    <Input {...register('password')} placeholder="Ваш пароль" />
+                    <Input 
+                        {...register('password')} 
+                        placeholder="Ваш пароль"
+                        data-testid="password" />
                     <FormErrorMessage>{errors.password?.type}</FormErrorMessage>
                 </FormControl>
                 
-                <Button mt={15} w="100%" alignSelf="center" colorScheme="blue" type="submit">Авторизироваться</Button>
+                <Button mt={15} data-testid="submit-button" w="100%" alignSelf="center" colorScheme="blue" type="submit">Авторизироваться</Button>
             </form>
         </Box>
     </>

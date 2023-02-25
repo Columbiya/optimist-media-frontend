@@ -31,6 +31,7 @@ export const ProfileImage: React.FC<ProfileImageProps> = ({ imagePreview, profil
             width={250}
             height={250}
             as="a"
+            data-testid="photo-container"
             onClick={() => fileInputRef.current.click()}
             onMouseEnter={setMouseOverProfilePhoto.on}
             onMouseLeave={setMouseOverProfilePhoto.off}
@@ -48,9 +49,10 @@ export const ProfileImage: React.FC<ProfileImageProps> = ({ imagePreview, profil
             background={!imageFixedWidth ? "#000": 'transparent'}
             mt={15}>
 
-            <Skeleton h="100%" isLoaded={imageLoaded} />
+            <Skeleton h="100%" isLoaded={imageLoaded} data-testid="skeleton" />
 
             <Image src={userProfilePhoto}
+                    data-testid="profile-photo"
                     alt={`Изображение профиля`} 
                     style={{objectFit: 'cover', opacity: isMouseOverProfilePhoto ? 0.7: 1, transition: 'opacity .5s ease'}}
                     onLoad={setImageLoaded.on}
@@ -62,6 +64,7 @@ export const ProfileImage: React.FC<ProfileImageProps> = ({ imagePreview, profil
                 pos="absolute" 
                 top="50%" 
                 left="50%" 
+                data-testid="download-icon"
                 transform="translate(-50%, -50%)"
                 opacity={isMouseOverProfilePhoto ? 1: 0}
                 transition="opacity .5s ease" />
