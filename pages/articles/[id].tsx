@@ -2,14 +2,19 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { AppContainer } from "@/components/AppContainer/AppContainer";
 import { MainLayout } from "@/layouts/MainLayout";
 import { Article } from "@/models/Article";
-import { Box, Button, Center, Container, Divider, Heading, Image, Text, Icon, useBoolean, Flex } from "@chakra-ui/react";
+import { Box, Button, Center, Container, Divider, Heading, Image, Text, Icon, useBoolean, Flex, useToast, Link } from "@chakra-ui/react";
 import { BsFillHeartFill } from 'react-icons/bs'
 import axios from "axios";
 import { GetServerSidePropsContext } from "next";
 import { NextPageWithLayout } from "../_app";
 import { CheckResponse, useAuthStore } from '@/store/authStore';
 import { ViewIcon } from '@chakra-ui/icons'
-import { EditorOutput, possibleBlocks } from '@/utils/editor-output';
+import { BlocksTypes, EditorOutput, possibleBlocks } from '@/utils/editor-output';
+import { LinkBlock } from '@/components/EditorBlocks/LinkBlock';
+import { ImageBlock } from '@/components/EditorBlocks/ImageBlock';
+import { DelimiterBlock } from '@/components/EditorBlocks/DelimiterBlock';
+import { ParagraphBlock } from '@/components/EditorBlocks/ParagraphBlock';
+import { QuoteBlock } from '@/components/EditorBlocks/QuoteBlock';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const promises = await Promise.allSettled([
@@ -40,13 +45,28 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         return {
             props: {
                 errored: true
-            }
+            },
+            notFound: true
         }
     }
 
 }
 
 const parseElement = (element: possibleBlocks) => {
+    switch(element.type) {
+        case BlocksTypes.LINK:
+            return <LinkBlock data={element.data} key={element.id} />
+        case BlocksTypes.IMAGE:
+            return <ImageBlock data={element.data} key={element.id} />
+        case BlocksTypes.DELIMITER:
+            return <DelimiterBlock key={element.id} />
+        case BlocksTypes.PARAGRAPH:
+            return <ParagraphBlock data={element.data} key={element.id} />
+        case BlocksTypes.QUOTE:
+            return <QuoteBlock data={element.data} key={element.id} />
+        default:
+            return <></>
+    }
 }
 
 type ArticleDetailsProps = Omit<Article, 'text'> & {likes: number} & {text: EditorOutput}
@@ -54,15 +74,26 @@ type ArticleDetailsProps = Omit<Article, 'text'> & {likes: number} & {text: Edit
 const ArticleDetails: NextPageWithLayout<ArticleDetailsProps> = ({ id, subjectId, text, title, userId, articleImage, views, likes: articleLikes }) => {
     const [liked, setLiked] = useBoolean(false)
     const [likes, setLikes] = useState(articleLikes)
-    const { user } = useAuthStore()
+    const toast = useToast()
+    const { user, loaded, isAuthenticated } = useAuthStore()
     const parsedContents = useMemo(() => {
-        // text.blocks.map()
-    }, [])
+        return text.blocks.map(parseElement)
+    }, [text])
 
-    console.log(articleImage)
+    console.log(text)
 
     const onArticleLike = useCallback(async () => {
-        if (!user) return
+        if (!user) {
+            toast({
+                status: 'info',
+                title: 'Ошибка',
+                description: 'Нужно авторизироваться, чтобы начать лайкать статьи',
+                isClosable: true,
+                duration: 5000
+            })
+
+            return
+        }
          
         try {
             if (!liked) {
@@ -84,7 +115,9 @@ const ArticleDetails: NextPageWithLayout<ArticleDetailsProps> = ({ id, subjectId
 
     useEffect(() => {
         async function getLiked() {
-            if (!user) return
+            if (!user) {
+                return
+            }
 
             try {
                 await axios.post<CheckResponse>('http://localhost:5000/api/articles/get-like', {userId: user?.id, articleId: id}).then(res => res.data)
@@ -99,6 +132,12 @@ const ArticleDetails: NextPageWithLayout<ArticleDetailsProps> = ({ id, subjectId
         getLiked()
     }, [user, id, setLiked])
 
+    useEffect(() => {
+        if (!isAuthenticated) {
+            setLiked.off()
+        }
+    }, [isAuthenticated])
+
     return (
          <>
             <AppContainer>
@@ -106,8 +145,8 @@ const ArticleDetails: NextPageWithLayout<ArticleDetailsProps> = ({ id, subjectId
                     <Image src={`http://localhost:5000/${articleImage}`} alt={title} />
                 </Box>
 
-                <Center mt={50} pb={50}>
-                    {/* {text.blocks.map(e => )} */}
+                <Center mt={50} pb={50} flexDir="column" fontSize="2xl">
+                    {parsedContents}
                 </Center>
 
             </AppContainer>

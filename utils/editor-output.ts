@@ -21,7 +21,8 @@ export interface EditorOutput {
     blocks: possibleBlocks[]
 }
 
-interface BlockImage {
+export interface BlockImage {
+    id: string,
     type: BlocksTypes.IMAGE,
     data: {
         caption: string
@@ -34,14 +35,16 @@ interface BlockImage {
     }
 }
 
-interface BlockParagraph {
+export interface BlockParagraph {
+    id: string,
     type: BlocksTypes.PARAGRAPH,
     data: {
         text: string
     }
 }
 
-interface BlockLink {
+export interface BlockLink {
+    id: string,
     type: BlocksTypes.LINK,
     data: {
         link: string
@@ -57,6 +60,7 @@ interface BlockLink {
 }
 
 interface BlockTable {
+    id: string,
     type: BlocksTypes.TABLE,
     data: {
         withHeadings: boolean
@@ -65,6 +69,7 @@ interface BlockTable {
 }
 
 interface BlockList {
+    id: string,
     type: BlocksTypes.LIST,
     data: {
         style: 'unordered' | 'ordered'
@@ -73,6 +78,7 @@ interface BlockList {
 }
 
 interface BlockWarning {
+    id: string,
     type: BlocksTypes.WARNING,
     data: {
         title: string
@@ -80,7 +86,8 @@ interface BlockWarning {
     }
 }
 
-interface BlockQuote {
+export interface BlockQuote {
+    id: string,
     type: BlocksTypes.QUOTE,
     data: {
         text: string
@@ -90,6 +97,7 @@ interface BlockQuote {
 }
 
 interface BlockChecklist {
+    id: string,
     type: BlocksTypes.CHECKLIST,
     data: {
         items: CheckItem[]
@@ -97,10 +105,12 @@ interface BlockChecklist {
 }
 
 interface CheckItem {
+    id: string,
     text: string
     checked: boolean
 }
 
 interface BlockDelimiter {
+    id: string,
     type: BlocksTypes.DELIMITER
 }

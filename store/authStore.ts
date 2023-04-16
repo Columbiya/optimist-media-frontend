@@ -50,7 +50,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     email: "123",
     getAuthenticated: () => set((state) => ({ isAuthenticated: true, loaded: true })),
     unauthorize: () => {
-        set((state) => ({ isAuthenticated: false }))
+        set((state) => ({ isAuthenticated: false, user: null, loaded: true }))
         localStorage.removeItem('accessToken')
         localStorage.removeItem('refreshToken')
     },
